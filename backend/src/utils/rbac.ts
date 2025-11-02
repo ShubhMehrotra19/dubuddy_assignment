@@ -20,7 +20,7 @@ export function checkPermission(
 
     if (permissions.includes(permission)) {
         if ((permission === 'update' || permission === 'delete') && model.ownerField) {
-            if (!record) return true; // Allow if record doesn't exist yet (will be checked later)
+            if (!record) return true; 
             return record[model.ownerField] === req.user.userId;
         }
         return true;
