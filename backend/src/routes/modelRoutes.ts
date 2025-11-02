@@ -12,7 +12,6 @@ import { registerModelRoutes } from '../utils/routeRegistry';
 
 const router = express.Router();
 
-// Get all models
 router.get('/', authenticate, async (req: AuthRequest, res) => {
     try {
         const models = await listModelDefinitions();
@@ -22,7 +21,6 @@ router.get('/', authenticate, async (req: AuthRequest, res) => {
     }
 });
 
-// Get single model
 router.get('/:modelName', authenticate, async (req: AuthRequest, res) => {
     try {
         const model = await loadModelDefinition(req.params.modelName);
@@ -35,12 +33,10 @@ router.get('/:modelName', authenticate, async (req: AuthRequest, res) => {
     }
 });
 
-// Create or update model (Admin only)
 router.post('/', authenticate, requireRole('Admin'), async (req: AuthRequest, res) => {
     try {
         const model: ModelDefinition = req.body;
 
-        // Validate model
         if (!model.name || !model.fields || !Array.isArray(model.fields)) {
             return res.status(400).json({ error: 'Invalid model definition' });
         }
@@ -52,7 +48,6 @@ router.post('/', authenticate, requireRole('Admin'), async (req: AuthRequest, re
     }
 });
 
-// Publish model (creates table and registers routes)
 router.post('/:modelName/publish', authenticate, requireRole('Admin'), async (req: AuthRequest, res) => {
     try {
         const model = await loadModelDefinition(req.params.modelName);
@@ -60,10 +55,8 @@ router.post('/:modelName/publish', authenticate, requireRole('Admin'), async (re
             return res.status(404).json({ error: 'Model not found' });
         }
 
-        // Create database table
         await createTableForModel(model);
 
-        // Register CRUD routes
         registerModelRoutes(model.name);
 
         res.json({ message: 'Model published successfully', model });
@@ -72,7 +65,6 @@ router.post('/:modelName/publish', authenticate, requireRole('Admin'), async (re
     }
 });
 
-// Delete model
 router.delete('/:modelName', authenticate, requireRole('Admin'), async (req: AuthRequest, res) => {
     try {
         await deleteModelDefinition(req.params.modelName);

@@ -10,7 +10,6 @@ const prisma = new PrismaClient();
 export function createCRUDRoutes(modelName: string) {
     const modelRouter = express.Router();
 
-    // GET /api/:modelName
     modelRouter.get('/', authenticate, async (req: AuthRequest, res) => {
         try {
             const model = await loadModelDefinition(modelName);
@@ -31,7 +30,6 @@ export function createCRUDRoutes(modelName: string) {
         }
     });
 
-    // GET /api/:modelName/:id
     modelRouter.get('/:id', authenticate, async (req: AuthRequest, res) => {
         try {
             const model = await loadModelDefinition(modelName);
@@ -60,7 +58,6 @@ export function createCRUDRoutes(modelName: string) {
         }
     });
 
-    // POST /api/:modelName
     modelRouter.post('/', authenticate, async (req: AuthRequest, res) => {
         try {
             const model = await loadModelDefinition(modelName);
@@ -75,7 +72,6 @@ export function createCRUDRoutes(modelName: string) {
             const tableName = model.tableName || `${model.name.toLowerCase()}s`;
             const data = req.body;
 
-            // Set owner field if specified
             if (model.ownerField && req.user) {
                 data[model.ownerField] = req.user.userId;
             }
@@ -99,7 +95,6 @@ export function createCRUDRoutes(modelName: string) {
         }
     });
 
-    // PUT /api/:modelName/:id
     modelRouter.put('/:id', authenticate, async (req: AuthRequest, res) => {
         try {
             const model = await loadModelDefinition(modelName);
@@ -146,7 +141,6 @@ export function createCRUDRoutes(modelName: string) {
         }
     });
 
-    // DELETE /api/:modelName/:id
     modelRouter.delete('/:id', authenticate, async (req: AuthRequest, res) => {
         try {
             const model = await loadModelDefinition(modelName);
