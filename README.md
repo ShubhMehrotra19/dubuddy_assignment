@@ -15,6 +15,10 @@ Traditional backend development follows a repetitive cycle: define a model → c
 
 ## 💡 Our Approach
 
+<img width="1887" height="913" alt="Screenshot 2025-11-01 235851" src="https://github.com/user-attachments/assets/f8e5733b-2dab-4d21-9610-53e5dd3b0d85" />
+<img width="1907" height="1686" alt="screencapture-localhost-3000-models-new-2025-11-02-00_01_05" src="https://github.com/user-attachments/assets/a5321184-6b57-4d37-ab1b-943d591594fa" />
+
+
 We've built a **meta-framework** that turns model definitions into living, breathing APIs. Instead of writing code for each model, you define what you need in JSON, and the platform handles the rest—dynamically.
 
 ### Core Philosophy
