@@ -6,7 +6,6 @@ import { authenticate, AuthRequest } from '../middleware/auth';
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// Register
 router.post('/register', async (req, res) => {
     try {
         const { email, password, role = 'Viewer' } = req.body;
@@ -15,7 +14,6 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'Email and password required' });
         }
 
-        // Check if user exists
         const existing = await prisma.user.findUnique({ where: { email } });
         if (existing) {
             return res.status(400).json({ error: 'User already exists' });
@@ -42,7 +40,6 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Login
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -73,7 +70,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Get current user
 router.get('/me', authenticate, async (req: AuthRequest, res) => {
     try {
         const user = await prisma.user.findUnique({

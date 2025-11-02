@@ -15,7 +15,6 @@ app.use(cors());
 app.use(express.json());
 initializeRouteRegistry(app);
 
-// Health check
 app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
 });

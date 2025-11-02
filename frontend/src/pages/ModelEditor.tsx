@@ -42,8 +42,7 @@ export default function ModelEditor() {
             setTableName(model.tableName || '');
             setFields(model.fields);
             setOwnerField(model.ownerField || '');
-            // @ts-ignore
-            setRbac(model.rbac);
+            setRbac(model.rbac as ModelRBAC);
         } catch (error) {
             console.error('Failed to fetch model:', error);
         }

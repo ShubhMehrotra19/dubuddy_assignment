@@ -19,7 +19,6 @@ export async function saveModelDefinition(model: ModelDefinition): Promise<void>
     const filePath = path.join(MODELS_DIR, `${model.name}.json`);
     await fs.writeFile(filePath, JSON.stringify(model, null, 2), 'utf-8');
 
-    // Also save to database for tracking
     await prisma.modelDefinition.upsert({
         where: { name: model.name },
         update: {
@@ -71,7 +70,6 @@ export async function deleteModelDefinition(modelName: string): Promise<void> {
     try {
         await fs.unlink(filePath);
     } catch {
-        // File might not exist
     }
 
     await prisma.modelDefinition.deleteMany({
@@ -82,18 +80,14 @@ export async function deleteModelDefinition(modelName: string): Promise<void> {
 export async function createTableForModel(model: ModelDefinition): Promise<void> {
     const tableName = model.tableName || `${model.name.toLowerCase()}s`;
 
-    // Build CREATE TABLE SQL
     let sql = `CREATE TABLE IF NOT EXISTS "${tableName}" (`;
 
-    // Always add id field
     sql += `"id" TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,`;
 
-    // Add owner field if specified
     if (model.ownerField) {
         sql += `"${model.ownerField}" TEXT,`;
     }
 
-    // Add each field
     for (const field of model.fields) {
         let columnDef = `"${field.name}" `;
 
@@ -121,7 +115,6 @@ export async function createTableForModel(model: ModelDefinition): Promise<void>
 
         if (field.default !== undefined) {
             if (typeof field.default === 'string') {
-                // Escape single quotes in strings
                 const escapedValue = field.default.replace(/'/g, "''");
                 columnDef += ` DEFAULT '${escapedValue}'`;
             } else if (typeof field.default === 'boolean') {
